@@ -6,6 +6,7 @@ NEGATIVE = 0
 ALPHA_POS = 0.4
 ALPHA_NEG = 0.2
 
+# Main QLearner class
 class QLearner(object):
     def __init__(self):
         self.Q = {}
@@ -20,19 +21,5 @@ class QLearner(object):
             self.Q[state] = Q + ALPHA_POS * delta
         else:
             self.Q[state] = Q + ALPHA_NEG * delta
-
-learner = QLearner()
-learner.learn("A", POSITIVE)
-learner.learn("A", POSITIVE)
-learner.learn("A", NEGATIVE)
-learner.learn("A", POSITIVE)
-learner.learn("A", NEGATIVE)
-
-learner.learn("B", NEGATIVE)
-learner.learn("B", NEGATIVE)
-learner.learn("B", POSITIVE)
-learner.learn("B", NEGATIVE)
-
-print learner.getQ("A")
 
 # We use a softmax to determine the best option
