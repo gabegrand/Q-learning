@@ -60,22 +60,54 @@ def test(learner, trials):
         if choice == "A": chosen_A += 1
         else: chosen_B += 1
 
-    print "PERCENT CHOSE A", float(chosen_A)/trials
-    print "PERCENT CHOSE B", float(chosen_B)/trials
+    print "PERCENT CHOSE A:", float(chosen_A)/trials
+    print "PERCENT CHOSE B:", float(chosen_B)/trials
+
+def chooseA_test(learner, trials):
+    # Set of more neutral stimuli
+    others = ["C", "D", "E", "F"]
+
+    chosen_A = 0
+    chosen_other = 0
+
+    for i in xrange(trials):
+        choice = learner.choose("A",random.choice(others))
+        if choice == "A": chosen_A += 1
+        else: chosen_other += 1
+
+    return float(chosen_A)/trials
+
+def avoidB_test(learner, trials):
+    # Set of more neutral stimuli
+    others = ["C", "D", "E", "F"]
+
+    chosen_B = 0
+    chosen_other = 0
+
+    for i in xrange(trials):
+        choice = learner.choose("B",random.choice(others))
+        if choice == "B": chosen_B += 1
+        else: chosen_other += 1
+
+    return float(chosen_other)/trials
 
 # Varying ALPHA_POS and ALPHA_NEG:
-print "\nOPTIMISTIC MODEL"
 optimist = train(0.4, 0.2, 0.2, 1000)
-test(optimist, 100)
+print "\nOPTIMISTIC MODEL"
+print "Percent Chose A:", chooseA_test(optimist, 100)
+print "Percent Avoided B:", avoidB_test(optimist, 100)
 
-print "\nPESSIMISTIC MODEL"
 pessimist = train(0.2, 0.4, 0.2, 1000)
-test(pessimist, 100)
+print "\nPESSIMISTIC MODEL"
+print "Percent Chose A:", chooseA_test(pessimist, 100)
+print "Percent Avoided B:", avoidB_test(pessimist, 100)
 
-print "\nNEUTRAL MODEL"
 neutral = train(0.3, 0.3, 0.2, 1000)
-test(neutral, 100)
+print "\nNEUTRAL MODEL"
+print "Percent Chose A:", chooseA_test(neutral, 100)
+print "Percent Avoided B:", avoidB_test(neutral, 100)
 
+'''
 # Varying BETA:
 print "\nLOW BETA"
 low_beta = train(0.3, 0.3, 0.1, 1000)
@@ -88,3 +120,4 @@ test(med_beta, 100)
 print "\nHIGH BETA"
 high_beta = train(0.3, 0.3, 0.8, 1000)
 test(high_beta, 100)
+'''
