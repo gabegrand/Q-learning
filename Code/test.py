@@ -16,7 +16,7 @@ def flip(p):
     return int(random.random() < p)
 
 # TESTING
-def test(pos, neg, beta, trials):
+def train(pos, neg, beta, trials):
     learner = model.QLearner(pos, neg, beta)
 
     # Learning sequence
@@ -45,18 +45,49 @@ def test(pos, neg, beta, trials):
     print "Learned E:", learner.getQ("E")
     print "Learned F:", learner.getQ("F")
 
+    return learner
+
+def simple_test(learner):
     print "CHOICE (A vs. B):", learner.choose("A","B")
     print "CHOICE (C vs. D):", learner.choose("C","D")
     print "CHOICE (E vs. F):", learner.choose("E","F")
 
-# Optimistic model: ALPHA_POS > ALPHA_NEG
+def test(learner, trials):
+    chosen_A = 0
+    chosen_B = 0
+    for i in xrange(trials):
+        choice = learner.choose("A","B")
+        if choice == "A": chosen_A += 1
+        else: chosen_B += 1
+
+    print "CHOSE A:", chosen_A, "times"
+    print "CHOSE B:", chosen_B, "times"
+
+    print "PERCENT CHOSE A", float(chosen_A)/trials
+    print "PERCENT CHOSE B", float(chosen_B)/trials
+
+# Varying ALPHA_POS and ALPHA_NEG:
 print "\nOPTIMISTIC MODEL"
-test(0.4, 0.2, 0.1, 1000)
+optimist = train(0.4, 0.2, 0.2, 1000)
+test(optimist, 100)
 
-# Pessimistic model: ALPHA_POS < ALPHA_NEG
 print "\nPESSIMISTIC MODEL"
-test(0.2, 0.4, 0.1, 1000)
+pessimist = train(0.2, 0.4, 0.2, 1000)
+test(pessimist, 100)
 
-# Neutral model: ALPHA_POS = ALPHA_NEG
 print "\nNEUTRAL MODEL"
-test(0.3, 0.3, 0.1, 1000)
+neutral = train(0.3, 0.3, 0.2, 1000)
+test(neutral, 100)
+
+# Varying BETA:
+print "\nLOW BETA"
+low_beta = train(0.3, 0.3, 0.1, 1000)
+test(low_beta, 100)
+
+print "\nMED BETA"
+med_beta = train(0.3, 0.3, 0.5, 1000)
+test(low_beta, 100)
+
+print "\nHIGH BETA"
+high_beta = train(0.3, 0.3, 0.8, 1000)
+test(low_beta, 100)
