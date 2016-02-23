@@ -46,3 +46,5 @@ print "Learned C:", learner.getQ("C")
 print "Learned D:", learner.getQ("D")
 print "Learned E:", learner.getQ("E")
 print "Learned F:", learner.getQ("F")
+
+print "CHOICE (A vs. B):", learner.choose("A","B")
