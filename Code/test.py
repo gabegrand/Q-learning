@@ -60,9 +60,6 @@ def test(learner, trials):
         if choice == "A": chosen_A += 1
         else: chosen_B += 1
 
-    print "CHOSE A:", chosen_A, "times"
-    print "CHOSE B:", chosen_B, "times"
-
     print "PERCENT CHOSE A", float(chosen_A)/trials
     print "PERCENT CHOSE B", float(chosen_B)/trials
 
@@ -86,8 +83,8 @@ test(low_beta, 100)
 
 print "\nMED BETA"
 med_beta = train(0.3, 0.3, 0.5, 1000)
-test(low_beta, 100)
+test(med_beta, 100)
 
 print "\nHIGH BETA"
 high_beta = train(0.3, 0.3, 0.8, 1000)
-test(low_beta, 100)
+test(high_beta, 100)
