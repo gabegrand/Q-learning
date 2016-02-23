@@ -5,13 +5,6 @@ import random
 POSITIVE = 1
 NEGATIVE = 0
 
-# Learning rates for positive and negative
-# ALPHA_POS = 0.4
-# ALPHA_NEG = 0.2
-
-# Softmax constant
-# BETA = 0.2
-
 # Main QLearner class
 class QLearner(object):
     def __init__(self, pos, neg, beta):

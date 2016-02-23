@@ -1,5 +1,7 @@
 import model
 import random
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Positive probabilities for stimuli pairs
 ProbA = 0.8
@@ -15,7 +17,7 @@ ProbF = 0.4
 def flip(p):
     return int(random.random() < p)
 
-# TESTING
+# Train the QLearner
 def train(pos, neg, beta, trials):
     learner = model.QLearner(pos, neg, beta)
 
@@ -47,11 +49,15 @@ def train(pos, neg, beta, trials):
 
     return learner
 
+# TESTING SUITE
+
+# One-off A vs. B test
 def simple_test(learner):
     print "CHOICE (A vs. B):", learner.choose("A","B")
     print "CHOICE (C vs. D):", learner.choose("C","D")
     print "CHOICE (E vs. F):", learner.choose("E","F")
 
+# Test over a number of trials
 def test(learner, trials):
     chosen_A = 0
     chosen_B = 0
@@ -63,6 +69,7 @@ def test(learner, trials):
     print "PERCENT CHOSE A:", float(chosen_A)/trials
     print "PERCENT CHOSE B:", float(chosen_B)/trials
 
+# Accuracy in choosing positive stimulus
 def chooseA_test(learner, trials):
     # Set of more neutral stimuli
     others = ["C", "D", "E", "F"]
@@ -77,6 +84,7 @@ def chooseA_test(learner, trials):
 
     return float(chosen_A)/trials
 
+# Accuracy in avoiding negative stimulus
 def avoidB_test(learner, trials):
     # Set of more neutral stimuli
     others = ["C", "D", "E", "F"]
@@ -92,20 +100,36 @@ def avoidB_test(learner, trials):
     return float(chosen_other)/trials
 
 # Varying ALPHA_POS and ALPHA_NEG:
-optimist = train(0.4, 0.2, 0.2, 1000)
-print "\nOPTIMISTIC MODEL"
-print "Percent Chose A:", chooseA_test(optimist, 100)
-print "Percent Avoided B:", avoidB_test(optimist, 100)
-
-pessimist = train(0.2, 0.4, 0.2, 1000)
-print "\nPESSIMISTIC MODEL"
-print "Percent Chose A:", chooseA_test(pessimist, 100)
-print "Percent Avoided B:", avoidB_test(pessimist, 100)
-
+optimist = train(0.4, 0.15, 0.2, 1000)
+pessimist = train(0.15, 0.4, 0.2, 1000)
 neutral = train(0.3, 0.3, 0.2, 1000)
-print "\nNEUTRAL MODEL"
-print "Percent Chose A:", chooseA_test(neutral, 100)
-print "Percent Avoided B:", avoidB_test(neutral, 100)
+
+# Visualizing the Choose A / Avoid B tests
+N = 3
+chooseA = (chooseA_test(optimist, 100),
+           chooseA_test(pessimist, 100),
+           chooseA_test(neutral, 100))
+
+ind = np.arange(N)  # the x locations for the groups
+width = 0.35       # the width of the bars
+
+fig, ax = plt.subplots()
+rects1 = ax.bar(ind, chooseA, width, color='g')
+
+chooseB = (avoidB_test(optimist, 100),
+           avoidB_test(pessimist, 100),
+           avoidB_test(neutral, 100))
+
+rects2 = ax.bar(ind + width, chooseB, width, color='r')
+
+# add some text for labels, title and axes ticks
+ax.set_ylabel('Accuracy')
+ax.set_title('Comparative accuracy on choice/avoidance tasks')
+ax.set_xticks(ind + width)
+ax.set_xticklabels(('Optimist', 'Pessimist', 'Neutral'))
+
+ax.legend((rects1[0], rects2[0]), ('Choose A Task', 'Avoid B Task'))
+plt.show()
 
 '''
 # Varying BETA:
