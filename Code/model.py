@@ -6,16 +6,19 @@ POSITIVE = 1
 NEGATIVE = 0
 
 # Learning rates for positive and negative
-ALPHA_POS = 0.4
-ALPHA_NEG = 0.2
+# ALPHA_POS = 0.4
+# ALPHA_NEG = 0.2
 
 # Softmax constant
-BETA = 0.2
+# BETA = 0.2
 
 # Main QLearner class
 class QLearner(object):
-    def __init__(self):
+    def __init__(self, pos, neg, beta):
         self.Q = {}
+        self.ALPHA_POS = pos
+        self.ALPHA_NEG = neg
+        self.BETA = beta
 
     def getQ(self, state):
         return self.Q.get(state, 0)
@@ -24,9 +27,9 @@ class QLearner(object):
         Q = self.getQ(state)
         delta = real_reward - Q
         if delta > 0:
-            self.Q[state] = Q + ALPHA_POS * delta
+            self.Q[state] = Q + self.ALPHA_POS * delta
         else:
-            self.Q[state] = Q + ALPHA_NEG * delta
+            self.Q[state] = Q + self.ALPHA_NEG * delta
 
     # We use a softmax to determine the best option
     def choose(self, stimA, stimB):
@@ -34,8 +37,8 @@ class QLearner(object):
         Q_B = float(self.getQ(stimB))
 
         # Equation 2 from paper
-        probChooseA = (math.exp(Q_A/BETA) /
-                      (math.exp(Q_A/BETA) + math.exp(Q_B/BETA)))
+        probChooseA = (math.exp(Q_A/self.BETA) /
+                      (math.exp(Q_A/self.BETA) + math.exp(Q_B/self.BETA)))
 
         if random.random() < probChooseA:
             choice = stimA
