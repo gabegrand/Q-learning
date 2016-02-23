@@ -20,9 +20,9 @@ def test(learner, trials):
     return float(chosen_A)/trials
 
 # Varying number of training trials
-stupid = tn.train(0.3, 0.3, 0.2, 4)
-medium = tn.train(0.3, 0.3, 0.2, 40)
-smart = tn.train(0.3, 0.3, 0.2, 400)
+stupid = tn.train(0.01, 0.01, 0.2, 4)
+medium = tn.train(0.01, 0.01, 0.2, 40)
+smart = tn.train(0.01, 0.01, 0.2, 400)
 
 '''
 # Visualizing effect of training on performance

@@ -1,5 +1,7 @@
 import model
 import random
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Positive probabilities for stimuli pairs
 ProbA = 0.8

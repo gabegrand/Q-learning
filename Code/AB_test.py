@@ -26,9 +26,9 @@ def avoidB_test(learner, trials):
     return float(avoidedB)/trials
 
 # Varying ALPHA_POS and ALPHA_NEG:
-optimist = tn.train(0.4, 0.15, 0.2, 1000)
-pessimist = tn.train(0.15, 0.4, 0.2, 1000)
-neutral = tn.train(0.3, 0.3, 0.2, 1000)
+optimist = tn.train(0.001, 0.004, 0.2, 10000)
+pessimist = tn.train(0.004, 0.001, 0.2, 10000)
+neutral = tn.train(0.001, 0.001, 0.2, 10000)
 
 # Visualizing the Choose A / Avoid B test for different alphas
 N = 3
